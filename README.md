@@ -21,12 +21,6 @@ DB scaffold:
 
 Scaffold-DbContext "Data Source=.;Initial Catalog=IB190096;Integrated Security=True;TrustServerCertificate=True" Microsoft.EntityFrameWorkCore.SqlServer -outputdir Repository/Models -context dbIB190096 -contextdir Repository -DataAnnotations -Force
 
-
-Scaffold-DbContext 'Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=IB190096;User=irman;Password=irman' Microsoft.EntityFrameworkCore.SqlServer
-
-
-dotnet ef dbcontext scaffold "Server=(localdb)\MSSQLLocalDB;Database=IB190096;User=DESKTOP-LBS0U9A\User;" Microsoft.EntityFrameworkCore.SqlServer
-
 EF Scaffolding:
 https://learn.microsoft.com/en-us/ef/core/managing-schemas/scaffolding/?tabs=vs
 
