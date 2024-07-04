@@ -19,7 +19,7 @@ NUGET: microsoft.aspnetcore.app
 
 DB scaffold:
 
-Scaffold-DbContext "Data Source=.;Initial Catalog=IB190096;Integrated Security=True;TrustServerCertificate=True" Microsoft.EntityFrameWorkCore.SqlServer -outputdir Repository/Models -context dbIB190096 -contextdir Repository -DataAnnotations -Force
+Scaffold-DbContext "Data Source=.;Initial Catalog=IB190096;Integrated Security=True;TrustServerCertificate=True" Microsoft.EntityFrameWorkCore.SqlServer -outputdir Database/Models -context dbIB190096Context -DataAnnotations -Force
 
 EF Scaffolding:
 https://learn.microsoft.com/en-us/ef/core/managing-schemas/scaffolding/?tabs=vs
