@@ -1,9 +1,17 @@
+using eLibrary.Commons.Interfaces;
+using eLibrary.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<IKnjigaService, KnjigaService>();
+builder.Services.AddSingleton<IKorisnikService, KorisnikService>();
+
+
 
 var app = builder.Build();
 
