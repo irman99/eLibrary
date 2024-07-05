@@ -10,6 +10,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IKnjigaService, KnjigaService>();
 builder.Services.AddSingleton<IKorisnikService, KorisnikService>();
+builder.Services.AddSingleton<IZanrService, ZanrService>();
+
 
 
 
