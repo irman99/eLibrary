@@ -13,6 +13,6 @@
 
     public class GetZanrRequest
     {
-        public int ZanrID { get; set; }
+        public int KnjigaID { get; set; }
     }
 }

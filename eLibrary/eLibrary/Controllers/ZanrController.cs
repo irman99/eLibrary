@@ -32,12 +32,12 @@ namespace eLibrary.Controllers
             }
 
             [HttpGet]
-            [Route("GetZanr")]
-            public IActionResult GetZanr([FromQuery] GetZanrRequest request)
+            [Route("GetZanrKnjige")]
+            public IActionResult GetZanrKnjige([FromQuery] GetZanrRequest request)
             {
                 try
                 {
-                    var response = _service.GetZanr(request);
+                    var response = _service.GetZanrKnjige(request);
                     return Ok(response);
                 }
                 catch (Exception ex)

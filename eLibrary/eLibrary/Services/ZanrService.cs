@@ -22,24 +22,25 @@ namespace eLibrary.Services
                             .ToList();
             return zanrovi;
         }
-        public GetZanrResponse GetZanr(GetZanrRequest request)
-        {
-            var zanr = _db.Zanrs
-                        .Where(z => z.ZanrId == request.ZanrID)
-                        .Select(z => new GetZanrResponse
-                        {
-                            ZanrID = z.ZanrId,
-                            NazivZanra = z.NazivZanra
-                        })
-                        .FirstOrDefault();
+        //public List<GetZanrResponse> GetZanrKnjige(GetZanrRequest request)
+        //{
+        //    var zanrKnjige = _db.
+        //.Where(zk => zk.KnjigaId == request.KnjigaID)
+        //.Select(zk => zk.Zanr)
+        //.Select(z => new GetZanrResponse
+        //{
+        //    ZanrID = z.ZanrId,
+        //    NazivZanra = z.NazivZanra
+        //})
+        //.ToList();
 
-            if (zanr == null)
-            {
-                throw new Exception($"Zanr sa ID {request.ZanrID} nije pronadjen.");
-            }
+        //    if (zanr == null)
+        //    {
+        //        throw new Exception($"Knjiga sa ID {request.KnjigaID} nije pronadjen.");
+        //    }
 
-            return zanr;
-        }
+        //    return zanr;
+        //}
         public CommonResponse CreateZanr(CreateZanrRequest request)
         {
             var zanr = new Zanr

@@ -8,7 +8,7 @@ namespace eLibrary.Commons.Interfaces
     public interface IZanrService
     {
         List<GetZanrResponse> GetZanrovi();
-        GetZanrResponse GetZanr(GetZanrRequest request);
+        List<GetZanrResponse> GetZanrKnjige(GetZanrRequest request);
         CommonResponse CreateZanr(CreateZanrRequest request);
         CommonResponse UpdateZanr(UpdateZanrRequest request);
         CommonResponse DeleteZanr(CommonDeleteRequest request);
