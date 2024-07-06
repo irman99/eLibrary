@@ -37,6 +37,14 @@ namespace eLibrary.Services
             _db.Korisniks.Add(korisnik);
             _db.SaveChanges();
 
+            var autor = new Autor
+            {
+                IdKorisnik = korisnik.IdKorisnik,
+            };
+
+            _db.Autors.Add(autor);
+            _db.SaveChanges();
+
             return new CommonResponse { Message = "User registered successfully." };
         }
 

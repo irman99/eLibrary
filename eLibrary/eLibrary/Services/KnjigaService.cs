@@ -65,6 +65,7 @@ namespace eLibrary.Services
                     Zanr = item.Zanr
                 });
             }
+
             return dataList;
         }
 
@@ -90,8 +91,20 @@ namespace eLibrary.Services
             Naslov= request.Naslov,
             NaslovnaSlika= request.NaslovnaSlika,
             };
-
+            
             var response = db.Knjigas.Add(newObject);
+            db.SaveChanges();
+
+            foreach (var zanrId in request.SelectedZanrIds)
+            {
+                var zanrKnjiga = new ZanroviKnjiga
+                {
+                    KnjigaId = newObject.IdKnjiga, // Assuming newObject is your newly created Knjiga entity
+                    ZanrId = zanrId // Assuming SelectedZanrId[i].value gives you the ZanrId
+                };
+                db.ZanroviKnjigas.Add(zanrKnjiga);
+            }
+
             db.SaveChanges();
             return new CommonResponse() { Id = response.Entity.IdKnjiga };
         }

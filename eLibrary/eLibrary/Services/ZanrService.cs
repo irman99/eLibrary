@@ -22,25 +22,25 @@ namespace eLibrary.Services
                             .ToList();
             return zanrovi;
         }
-        //public List<GetZanrResponse> GetZanrKnjige(GetZanrRequest request)
-        //{
-        //    var zanrKnjige = _db.
-        //.Where(zk => zk.KnjigaId == request.KnjigaID)
-        //.Select(zk => zk.Zanr)
-        //.Select(z => new GetZanrResponse
-        //{
-        //    ZanrID = z.ZanrId,
-        //    NazivZanra = z.NazivZanra
-        //})
-        //.ToList();
+        public List<GetZanrResponse> GetZanrKnjige(GetZanrRequest request)
+        {
+            var zanrKnjiga = _db.ZanroviKnjigas.Where(x => x.KnjigaId == request.KnjigaID).Select(x=>x.ZanrId).ToList();
 
-        //    if (zanr == null)
-        //    {
-        //        throw new Exception($"Knjiga sa ID {request.KnjigaID} nije pronadjen.");
-        //    }
+            var zanrovi = _db.Zanrs.Where(x => zanrKnjiga.Contains(x.ZanrId)).ToList();
 
-        //    return zanr;
-        //}
+            var dataList=new List<GetZanrResponse>();
+
+            foreach (var item in zanrovi)
+            {
+                dataList.Add(new GetZanrResponse()
+                {
+                    ZanrID= item.ZanrId,
+                    NazivZanra=item.NazivZanra
+                });
+            }
+
+            return dataList;
+        }
         public CommonResponse CreateZanr(CreateZanrRequest request)
         {
             var zanr = new Zanr

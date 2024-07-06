@@ -43,6 +43,8 @@ public partial class dbIB190096Context : DbContext
 
     public virtual DbSet<Zanr> Zanrs { get; set; }
 
+    public virtual DbSet<ZanroviKnjiga> ZanroviKnjigas { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=IB190096;Integrated Security=True;TrustServerCertificate=True");
@@ -81,25 +83,6 @@ public partial class dbIB190096Context : DbContext
             entity.HasOne(d => d.Autor).WithMany(p => p.Knjigas)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Knjiga_Autor");
-
-            entity.HasMany(d => d.Zanrs).WithMany(p => p.Knjigas)
-                .UsingEntity<Dictionary<string, object>>(
-                    "ZanroviKnjiga",
-                    r => r.HasOne<Zanr>().WithMany()
-                        .HasForeignKey("ZanrId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_ZK_Zanr"),
-                    l => l.HasOne<Knjiga>().WithMany()
-                        .HasForeignKey("KnjigaId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_ZK_Knjiga"),
-                    j =>
-                    {
-                        j.HasKey("KnjigaId", "ZanrId").HasName("PK__ZanroviK__6341075C47E0A703");
-                        j.ToTable("ZanroviKnjiga");
-                        j.IndexerProperty<int>("KnjigaId").HasColumnName("KnjigaID");
-                        j.IndexerProperty<int>("ZanrId").HasColumnName("ZanrID");
-                    });
         });
 
         modelBuilder.Entity<KnjigaKorisnik>(entity =>
@@ -174,6 +157,19 @@ public partial class dbIB190096Context : DbContext
         modelBuilder.Entity<Zanr>(entity =>
         {
             entity.HasKey(e => e.ZanrId).HasName("PK__Zanr__953868F360589D60");
+        });
+
+        modelBuilder.Entity<ZanroviKnjiga>(entity =>
+        {
+            entity.HasKey(e => e.ZanroviKnjigaId).HasName("PK__ZanroviK__1B7D23DBE4800B7D");
+
+            entity.HasOne(d => d.Knjiga).WithMany(p => p.ZanroviKnjigas)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__ZanroviKn__Knjig__123EB7A3");
+
+            entity.HasOne(d => d.Zanr).WithMany(p => p.ZanroviKnjigas)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__ZanroviKn__ZanrI__1332DBDC");
         });
 
         OnModelCreatingPartial(modelBuilder);

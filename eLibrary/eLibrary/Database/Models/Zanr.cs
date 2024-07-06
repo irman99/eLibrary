@@ -16,7 +16,6 @@ public partial class Zanr
     [StringLength(30)]
     public string? NazivZanra { get; set; }
 
-    [ForeignKey("ZanrId")]
-    [InverseProperty("Zanrs")]
-    public virtual ICollection<Knjiga> Knjigas { get; set; } = new List<Knjiga>();
+    [InverseProperty("Zanr")]
+    public virtual ICollection<ZanroviKnjiga> ZanroviKnjigas { get; set; } = new List<ZanroviKnjiga>();
 }

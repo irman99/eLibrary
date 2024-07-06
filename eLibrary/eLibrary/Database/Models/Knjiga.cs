@@ -46,7 +46,6 @@ public partial class Knjiga
     [InverseProperty("Knjiga")]
     public virtual ICollection<Komentari> Komentaris { get; set; } = new List<Komentari>();
 
-    [ForeignKey("KnjigaId")]
-    [InverseProperty("Knjigas")]
-    public virtual ICollection<Zanr> Zanrs { get; set; } = new List<Zanr>();
+    [InverseProperty("Knjiga")]
+    public virtual ICollection<ZanroviKnjiga> ZanroviKnjigas { get; set; } = new List<ZanroviKnjiga>();
 }
