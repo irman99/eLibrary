@@ -25,10 +25,6 @@ namespace eLibrary.Services
             {
                 query = query.Where(k => k.Naslov.Contains(request.Naslov));
             }
-            if (!string.IsNullOrEmpty(request.Zanr))
-            {
-                query = query.Where(k => k.Zanr.Contains(request.Zanr));
-            }
             if (request.AutorId.HasValue)
             {
                 query = query.Where(k => k.AutorId == request.AutorId.Value);
@@ -61,8 +57,7 @@ namespace eLibrary.Services
                     IdKnjiga = item.IdKnjiga,
                     Naslov = item.Naslov,
                     NaslovnaSlika = item.NaslovnaSlika,
-                    Opis = item.Opis,
-                    Zanr = item.Zanr
+                    Opis = item.Opis
                 });
             }
 
@@ -74,11 +69,11 @@ namespace eLibrary.Services
             var KnjigaExists = db.Knjigas.Where(x => x.Naslov.Equals(request.Naslov)).FirstOrDefault();
             if (KnjigaExists != null)
             {
-                throw new InvalidOperationException("Book title u provided is already taken.");
+                throw new InvalidOperationException("Naslov knjige je vec zauzet.");
             }
             var AutorExists=db.Autors.Where(x=>x.AutorId==request.AutorId).FirstOrDefault();
             if (AutorExists == null) {
-                throw new NullReferenceException("Author with provided ID does not exist.");
+                throw new NullReferenceException("Autor ne postoji.");
             }
 
             var newObject=new Knjiga() { 
@@ -87,7 +82,6 @@ namespace eLibrary.Services
             DatumIzdavanja = request.DatumIzdavanja,
             Dostupnost = true,
             Opis= request.Opis,
-            Zanr = request.Zanr,
             Naslov= request.Naslov,
             NaslovnaSlika= request.NaslovnaSlika,
             };
@@ -99,13 +93,20 @@ namespace eLibrary.Services
             {
                 var zanrKnjiga = new ZanroviKnjiga
                 {
-                    KnjigaId = newObject.IdKnjiga, // Assuming newObject is your newly created Knjiga entity
-                    ZanrId = zanrId // Assuming SelectedZanrId[i].value gives you the ZanrId
+                    KnjigaId = newObject.IdKnjiga, 
+                    ZanrId = zanrId 
                 };
                 db.ZanroviKnjigas.Add(zanrKnjiga);
             }
 
             db.SaveChanges();
+
+            var knjigaKorisnik = new KnjigaKorisnik
+            {
+                KorisnikId = request.AutorId, 
+                KnjigaId = newObject.IdKnjiga
+            };
+
             return new CommonResponse() { Id = response.Entity.IdKnjiga };
         }
 
@@ -114,15 +115,11 @@ namespace eLibrary.Services
 
             if (knjiga == null)
             {
-                return new CommonResponse { Message = $"Knjiga with ID {request.IdKnjiga} not found." };
+                return new CommonResponse { Message = $"Knjiga {request.IdKnjiga} nije pronadjena." };
             }
             if (request.Naslov != null)
             {
                 knjiga.Naslov = request.Naslov;
-            }
-            if (request.Zanr != null)
-            {
-                knjiga.Zanr = request.Zanr;
             }
             if (request.Opis != null)
             {
@@ -143,7 +140,7 @@ namespace eLibrary.Services
 
             db.SaveChanges();
 
-            return new CommonResponse {Message = $"Knjiga with ID {request.IdKnjiga} updated successfully." };
+            return new CommonResponse {Message = $"Knjiga {request.IdKnjiga} uspjesno updateovana." };
 
 
         }
@@ -153,12 +150,12 @@ namespace eLibrary.Services
 
             if (knjiga == null)
             {
-                return new CommonResponse { Message = $"Knjiga with ID {request.Id} not found." };
+                return new CommonResponse { Message = $"Knjiga {request.Id} nije pronadjena." };
             }
             db.Knjigas.Remove(knjiga);
             db.SaveChanges();
 
-            return new CommonResponse { Message = $"Knjiga with ID {request.Id} deleted successfully." };
+            return new CommonResponse { Message = $"Knjiga {request.Id} uspjesno izbrisana." };
         }
     }
 }

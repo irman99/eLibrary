@@ -3,7 +3,6 @@
     public class CreateKnjigaRequest
     {
         public string Naslov { get; set; } = null!;
-        public string Zanr { get; set; } = null!;
         public List<int> SelectedZanrIds { get; set; }
         public int AutorId { get; set; }
         public DateOnly DatumIzdavanja { get; set; }

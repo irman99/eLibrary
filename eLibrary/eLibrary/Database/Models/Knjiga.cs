@@ -15,9 +15,6 @@ public partial class Knjiga
     [StringLength(30)]
     public string Naslov { get; set; } = null!;
 
-    [StringLength(30)]
-    public string Zanr { get; set; } = null!;
-
     [Column("AutorID")]
     public int AutorId { get; set; }
 
@@ -45,6 +42,9 @@ public partial class Knjiga
 
     [InverseProperty("Knjiga")]
     public virtual ICollection<Komentari> Komentaris { get; set; } = new List<Komentari>();
+
+    [InverseProperty("IdKnjigaNavigation")]
+    public virtual ICollection<Ocjene> Ocjenes { get; set; } = new List<Ocjene>();
 
     [InverseProperty("Knjiga")]
     public virtual ICollection<ZanroviKnjiga> ZanroviKnjigas { get; set; } = new List<ZanroviKnjiga>();

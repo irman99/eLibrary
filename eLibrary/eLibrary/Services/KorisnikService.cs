@@ -31,7 +31,7 @@ namespace eLibrary.Services
                 LozinkaHash = hash,
                 LozinkaSalt = salt,
                 DatumRodjenja = request.DatumRodjenja,
-                TipKorisnikaId = request.TipKorisnika,
+                TipKorisnikaId = request.TipKorisnika ?? 3,
             };
 
             _db.Korisniks.Add(korisnik);
@@ -39,7 +39,8 @@ namespace eLibrary.Services
 
             var autor = new Autor
             {
-                IdKorisnik = korisnik.IdKorisnik,
+                AutorId= korisnik.IdKorisnik,
+                KorisnikId=korisnik.IdKorisnik
             };
 
             _db.Autors.Add(autor);

@@ -10,6 +10,6 @@ namespace eLibrary.Commons.DTOs.Requests.Korisnik
         public string KorisnickoIme { get; set; } = null!;
         public string Lozinka { get; set; } = null!;
         public DateTime DatumRodjenja { get; set; }
-        public int TipKorisnika { get; set; }
+        public int? TipKorisnika { get; set; }
     }
 }

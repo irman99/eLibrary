@@ -1,5 +1,8 @@
 using eLibrary.Commons.Interfaces;
+using eLibrary.Database.Models;
 using eLibrary.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,16 +11,25 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<IKnjigaService, KnjigaService>();
-builder.Services.AddSingleton<IKorisnikService, KorisnikService>();
-builder.Services.AddSingleton<IZanrService, ZanrService>();
-builder.Services.AddSingleton<IKomentarService, KomentarService>();
+builder.Services.AddDbContext<dbIB190096Context>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<IKnjigaService, KnjigaService>();
+builder.Services.AddScoped<IKorisnikService, KorisnikService>();
+builder.Services.AddScoped<IZanrService, ZanrService>();
+builder.Services.AddScoped<IKomentarService, KomentarService>();
+builder.Services.AddScoped<IOcjeneService, OcjeneService>();
+builder.Services.AddScoped<IMedaljaService, MedaljaService>();
 
+builder.Services.AddScoped<IFajloviKnjigeService>(provider =>
+{
+    var context = provider.GetRequiredService<dbIB190096Context>();
+    var fileUploadPath = Path.Combine(Directory.GetCurrentDirectory(), "Database", "UploadovaneKnjige");
+    return new FajloviKnjigeService(context, fileUploadPath);
+});
 
 
 var app = builder.Build();
-
 
 if (app.Environment.IsDevelopment())
 {
@@ -34,6 +46,7 @@ else
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

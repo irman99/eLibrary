@@ -12,11 +12,11 @@ public partial class FajloviKnjige
     [Key]
     public int IdFile { get; set; }
 
-    [StringLength(30)]
-    public string? NazivFilea { get; set; }
+    [StringLength(255)]
+    public string NazivFilea { get; set; } = null!;
 
-    [MaxLength(1)]
-    public byte[]? SadrzajFilea { get; set; }
+    [StringLength(255)]
+    public string PathToFile { get; set; } = null!;
 
     public int? IdKnjiga { get; set; }
 

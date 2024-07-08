@@ -35,7 +35,7 @@ public partial class dbIB190096Context : DbContext
 
     public virtual DbSet<Notifikacije> Notifikacijes { get; set; }
 
-    public virtual DbSet<Ocjena> Ocjenas { get; set; }
+    public virtual DbSet<Ocjene> Ocjenes { get; set; }
 
     public virtual DbSet<TipKorisnika> TipKorisnikas { get; set; }
 
@@ -55,18 +55,18 @@ public partial class dbIB190096Context : DbContext
 
         modelBuilder.Entity<Autor>(entity =>
         {
-            entity.HasKey(e => e.AutorId).HasName("PK__Autor__F58AE909FF3A2D32");
+            entity.HasKey(e => e.AutorId).HasName("PK__Autor__F58AE909C6B597BE");
 
-            entity.HasOne(d => d.IdKorisnikNavigation).WithOne(p => p.Autor).HasConstraintName("FK_Autor_Korisnik");
+            entity.Property(e => e.AutorId).ValueGeneratedNever();
+
+            entity.HasOne(d => d.Korisnik).WithMany(p => p.Autors).HasConstraintName("FK__Autor__KorisnikI__2CF2ADDF");
         });
 
         modelBuilder.Entity<FajloviKnjige>(entity =>
         {
-            entity.HasKey(e => e.IdFile).HasName("PK__FajloviK__01E644E1C53A6723");
+            entity.HasKey(e => e.IdFile).HasName("PK__FajloviK__01E644E18C3C6F9A");
 
-            entity.Property(e => e.SadrzajFilea).IsFixedLength();
-
-            entity.HasOne(d => d.IdKnjigaNavigation).WithMany(p => p.FajloviKnjiges).HasConstraintName("FK_Fajlovi_Knjige");
+            entity.HasOne(d => d.IdKnjigaNavigation).WithMany(p => p.FajloviKnjiges).HasConstraintName("FK_FajloviKnjige_Knjiga");
         });
 
         modelBuilder.Entity<Kartica>(entity =>
@@ -135,11 +135,17 @@ public partial class dbIB190096Context : DbContext
                 .HasConstraintName("FK_Notifikacije_TipNotifikacije");
         });
 
-        modelBuilder.Entity<Ocjena>(entity =>
+        modelBuilder.Entity<Ocjene>(entity =>
         {
-            entity.HasKey(e => e.OcjenaId).HasName("PK__Ocjena__E6FC7B49718B4227");
+            entity.HasKey(e => e.OcjenaId).HasName("PK__Ocjene__E6FC7B494960E30A");
 
-            entity.HasOne(d => d.Korisnik).WithMany(p => p.Ocjenas).HasConstraintName("FK_Ocjena_Korisnik");
+            entity.HasOne(d => d.IdKnjigaNavigation).WithMany(p => p.Ocjenes).HasConstraintName("FK__Ocjene__IdKnjiga__25518C17");
+
+            entity.HasOne(d => d.IdKorisnikNavigation).WithMany(p => p.OcjeneIdKorisnikNavigations).HasConstraintName("FK__Ocjene__IdKorisn__245D67DE");
+
+            entity.HasOne(d => d.IdKorisnikPosiljalacNavigation).WithMany(p => p.OcjeneIdKorisnikPosiljalacNavigations)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Ocjene__IdKorisn__2645B050");
         });
 
         modelBuilder.Entity<TipKorisnika>(entity =>
