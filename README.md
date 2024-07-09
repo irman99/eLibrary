@@ -4,7 +4,7 @@ Projekat RS2
 user: admin
 password: admin123
 
-.NET 6
+.NET 8
 Visual Studio 2022
 Microsoft SQL Server 2019
 
