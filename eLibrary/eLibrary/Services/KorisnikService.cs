@@ -5,6 +5,7 @@ using eLibrary.Commons.DTOs.Responses;
 using eLibrary.Commons.DTOs.Responses.Korisnik;
 using eLibrary.Commons.Interfaces;
 using eLibrary.Database.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -47,6 +48,23 @@ namespace eLibrary.Services
             _db.SaveChanges();
 
             return new CommonResponse { Message = "User registered successfully." };
+        }
+
+        public List<GetKorisnikResponse> GetAllKorisniks()
+        {
+            var korisnici = _db.Korisniks.ToList();
+
+            return korisnici.Select(korisnik => new GetKorisnikResponse
+            {
+                IdKorisnik = korisnik.IdKorisnik,
+                Ime = korisnik.Ime,
+                Prezime = korisnik.Prezime,
+                Email = korisnik.Email,
+                KorisnickoIme = korisnik.KorisnickoIme,
+                Fotografija = korisnik.Fotografija,
+                DatumRodjenja = korisnik.DatumRodjenja,
+                TipKorisnika = korisnik.TipKorisnika
+            }).ToList();
         }
 
         public CommonResponse LoginKorisnik(LoginKorisnikRequest request)

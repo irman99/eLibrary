@@ -75,8 +75,21 @@ namespace eLibrary.Controllers
                     return BadRequest(ex.Message);
                 }
             }
-
-            [HttpDelete]
+        [HttpGet]
+        [Route("GetAllKorisniks")]
+        public IActionResult GetAllKorisniks()
+        {
+            try
+            {
+                var response = _service.GetAllKorisniks();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete]
             [Route("DeleteKorisnik")]
             public IActionResult DeleteKorisnik([FromBody] CommonDeleteRequest request)
             {

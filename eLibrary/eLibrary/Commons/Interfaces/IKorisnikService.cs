@@ -9,6 +9,7 @@ namespace eLibrary.Commons.Interfaces
     {
         CommonResponse RegisterKorisnik(RegisterKorisnikRequest request);
         CommonResponse LoginKorisnik(LoginKorisnikRequest request);
+        List<GetKorisnikResponse> GetAllKorisniks();
         GetKorisnikResponse GetKorisnik(GetKorisnikRequest request);
         CommonResponse UpdateKorisnik(UpdateKorisnikRequest request);
         CommonResponse DeleteKorisnik(CommonDeleteRequest request);
