@@ -2,6 +2,7 @@
 using eLibrary.Commons.DTOs.Requests;
 using eLibrary.Commons.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eLibrary.Controllers
 {
@@ -18,6 +19,7 @@ namespace eLibrary.Controllers
 
             [HttpPost]
             [Route("RegisterKorisnik")]
+            [AllowAnonymous]
             public IActionResult RegisterKorisnik([FromBody] RegisterKorisnikRequest request)
             {
                 try
@@ -33,6 +35,7 @@ namespace eLibrary.Controllers
 
             [HttpPost]
             [Route("LoginKorisnik")]
+            [AllowAnonymous]
             public IActionResult LoginKorisnik([FromBody] LoginKorisnikRequest request)
             {
                 try
@@ -48,6 +51,7 @@ namespace eLibrary.Controllers
 
             [HttpGet]
             [Route("GetKorisnik")]
+            [Authorize]
             public IActionResult GetKorisnik([FromQuery] GetKorisnikRequest request)
             {
                 try
@@ -63,6 +67,7 @@ namespace eLibrary.Controllers
 
             [HttpPut]
             [Route("UpdateKorisnik")]
+            [Authorize]
             public IActionResult UpdateKorisnik([FromBody] UpdateKorisnikRequest request)
             {
                 try
@@ -77,6 +82,7 @@ namespace eLibrary.Controllers
             }
         [HttpGet]
         [Route("GetAllKorisniks")]
+        [Authorize(Policy = "AdminOnly")]
         public IActionResult GetAllKorisniks()
         {
             try
@@ -91,6 +97,7 @@ namespace eLibrary.Controllers
         }
         [HttpDelete]
             [Route("DeleteKorisnik")]
+            [Authorize(Policy = "AdminOnly")]
             public IActionResult DeleteKorisnik([FromBody] CommonDeleteRequest request)
             {
                 try

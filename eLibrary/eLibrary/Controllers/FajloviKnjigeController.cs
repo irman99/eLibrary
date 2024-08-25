@@ -1,6 +1,7 @@
 ﻿using eLibrary.Commons.DTOs.Requests.FajloviKnjige;
 using eLibrary.Commons.Interfaces;
 using eLibrary.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eLibrary.Controllers
@@ -16,6 +17,7 @@ namespace eLibrary.Controllers
         }
 
         [HttpPost("CreateFajloviKnjige")]
+        [Authorize(Policy = "UserOnly")]
         public async Task<IActionResult> CreateFajloviKnjige([FromForm] CreateFajloviKnjigeRequest request)
         {
             var response = await _service.CreateFajloviKnjige(request);
@@ -27,6 +29,7 @@ namespace eLibrary.Controllers
         }
 
         [HttpGet("DownloadFile")]
+        [Authorize]
         public async Task<IActionResult> DownloadFile([FromQuery] GetKnjigaFileRequest request)
         {
             var filePath = await _service.GetFilePathForKnjigaAsync(request);

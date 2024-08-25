@@ -1,5 +1,6 @@
 ﻿using eLibrary.Commons.DTOs.Requests.Ocjene;
 using eLibrary.Commons.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eLibrary.Controllers
@@ -14,7 +15,7 @@ namespace eLibrary.Controllers
         {
             _service = service;
         }
-
+        [Authorize(Policy = "UserOnly")]
         [HttpPost]
         [Route("CreateOcjenaKorisnik")]
         public IActionResult CreateOcjenaKorisnik([FromBody] CreateOcjenaRequest request)
@@ -29,7 +30,7 @@ namespace eLibrary.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [Authorize(Policy = "UserOnly")]
         [HttpPost]
         [Route("CreateOcjenaKnjiga")]
         public IActionResult CreateOcjenaKnjiga([FromBody] CreateOcjenaRequest request)
@@ -44,7 +45,7 @@ namespace eLibrary.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [Authorize(Policy = "UserOnly")]
         [HttpPut]
         [Route("UpdateOcjena")]
         public IActionResult UpdateOcjena([FromBody] UpdateOcjenaRequest request)
@@ -59,6 +60,7 @@ namespace eLibrary.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize]
         [HttpGet]
         [Route("GetOcjenaKorisnika")]
         public IActionResult GetOcjenaKorisnika([FromQuery] GetOcjenaRequest request)
@@ -73,7 +75,7 @@ namespace eLibrary.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [Authorize]
         [HttpGet]
         [Route("GetOcjenaKnjige")]
         public IActionResult GetOcjenaKnjige([FromQuery] GetOcjenaRequest request)

@@ -5,12 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a113e81a-3129-4574-b9f0-539c59707d57" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/elibrarymobile/lib/models/korisnik.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/elibrarymobile/lib/screens/korisnik_detail_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/elibrarymobile/lib/widgets/year_picker.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eLibrary/eLibrary/Commons/DTOs/Requests/Knjiga/GetKnjigeRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/eLibrary/eLibrary/Commons/DTOs/Requests/Knjiga/GetKnjigeRequest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eLibrary/eLibrary/Commons/DTOs/Responses/Knjiga/GetKnjigeResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/eLibrary/eLibrary/Commons/DTOs/Responses/Knjiga/GetKnjigeResponse.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eLibrary/eLibrary/Services/KnjigaService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/eLibrary/eLibrary/Services/KnjigaService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +40,7 @@
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
+    "dart.analysis.tool.window.visible": "false",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "settings.editor.selected.configurable": "preferences.pluginManager",

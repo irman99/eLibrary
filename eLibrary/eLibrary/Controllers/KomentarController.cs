@@ -1,6 +1,7 @@
 ﻿using eLibrary.Commons.DTOs.Requests;
 using eLibrary.Commons.DTOs.Requests.Komentar;
 using eLibrary.Commons.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace eLibrary.Controllers;
 
@@ -17,6 +18,7 @@ public class KomentarController : ControllerBase
 
     [HttpGet]
     [Route("GetKomentariByKnjigaId")]
+    [Authorize]
     public IActionResult GetKomentariByKnjigaId([FromQuery]GetKomentariRequest request)
     {
         try
@@ -32,6 +34,7 @@ public class KomentarController : ControllerBase
 
     [HttpPost]
     [Route("CreateKomentar")]
+    [Authorize(Policy = "UserOnly")]
     public IActionResult CreateKomentar([FromBody] CreateKomentarRequest request)
     {
         try
@@ -47,6 +50,7 @@ public class KomentarController : ControllerBase
 
     [HttpPut]
     [Route("UpdateKomentar")]
+    [Authorize(Policy = "UserOnly")]
     public IActionResult UpdateKomentar([FromBody] UpdateKomentarRequest request)
     {
         try
@@ -62,6 +66,7 @@ public class KomentarController : ControllerBase
 
     [HttpDelete]
     [Route("DeleteKomentar")]
+    [Authorize(Policy = "UserOnly")]
     public IActionResult DeleteKomentar([FromBody]CommonDeleteRequest request)
     {
         try

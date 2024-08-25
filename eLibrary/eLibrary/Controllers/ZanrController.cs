@@ -2,6 +2,7 @@
 using eLibrary.Commons.DTOs.Requests;
 using eLibrary.Commons.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eLibrary.Controllers
 {
@@ -15,7 +16,7 @@ namespace eLibrary.Controllers
             {
                 _service = service;
             }
-
+            [Authorize]
             [HttpGet]
             [Route("GetZanrovi")]
             public IActionResult GetZanrovi()
@@ -30,7 +31,7 @@ namespace eLibrary.Controllers
                     return BadRequest(ex.Message);
                 }
             }
-
+            [Authorize]
             [HttpGet]
             [Route("GetZanrKnjige")]
             public IActionResult GetZanrKnjige([FromQuery] GetZanrRequest request)
@@ -46,7 +47,7 @@ namespace eLibrary.Controllers
                 }
             }
 
-            [HttpPost]
+            [Authorize(Policy = "AdminOnly")]
             [Route("CreateZanr")]
             public IActionResult CreateZanr([FromBody] CreateZanrRequest request)
             {
@@ -60,7 +61,7 @@ namespace eLibrary.Controllers
                     return BadRequest(ex.Message);
                 }
             }
-
+            [Authorize(Policy = "AdminOnly")]
             [HttpPut]
             [Route("UpdateZanr")]
             public IActionResult UpdateZanr([FromBody] UpdateZanrRequest request)
@@ -75,7 +76,7 @@ namespace eLibrary.Controllers
                     return BadRequest(ex.Message);
                 }
             }
-
+            [Authorize(Policy = "AdminOnly")]
             [HttpDelete]
             [Route("DeleteZanr")]
             public IActionResult DeleteZanr([FromBody] CommonDeleteRequest request)

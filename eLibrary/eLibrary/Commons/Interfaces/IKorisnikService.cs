@@ -8,7 +8,7 @@ namespace eLibrary.Commons.Interfaces
     public interface IKorisnikService
     {
         CommonResponse RegisterKorisnik(RegisterKorisnikRequest request);
-        CommonResponse LoginKorisnik(LoginKorisnikRequest request);
+        LogInResponse LoginKorisnik(LoginKorisnikRequest request);
         List<GetKorisnikResponse> GetAllKorisniks();
         GetKorisnikResponse GetKorisnik(GetKorisnikRequest request);
         CommonResponse UpdateKorisnik(UpdateKorisnikRequest request);

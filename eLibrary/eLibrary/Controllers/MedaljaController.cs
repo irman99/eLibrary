@@ -1,6 +1,7 @@
 ﻿using eLibrary.Commons.DTOs.Requests;
 using eLibrary.Commons.DTOs.Requests.Medalja;
 using eLibrary.Commons.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eLibrary.Controllers
@@ -15,7 +16,7 @@ namespace eLibrary.Controllers
         {
             _service = service;
         }
-
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost]
         [Route("CreateMedalja")]
         public IActionResult CreateMedalja([FromBody] CreateMedaljaRequest request)
@@ -30,7 +31,7 @@ namespace eLibrary.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [Authorize(Policy = "AdminOnly")]
         [HttpGet]
         [Route("GetAllMedalje")]
         public IActionResult GetAllMedalje()
@@ -45,7 +46,7 @@ namespace eLibrary.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [Authorize(Policy = "AdminOnly")]
         [HttpPut]
         [Route("UpdateMedalja")]
         public IActionResult UpdateMedalja([FromBody] UpdateMedaljaRequest request)
@@ -60,7 +61,7 @@ namespace eLibrary.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [Authorize(Policy = "AdminOnly")]
         [HttpDelete]
         [Route("DeleteMedalja")]
         public IActionResult DeleteMedalja([FromBody]CommonDeleteRequest request)
@@ -75,6 +76,7 @@ namespace eLibrary.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize(Policy = "AdminOnly")]
         [HttpPost]
         [Route("AssignMedaljaToKorisnik")]
         public IActionResult AssignMedaljaToKorisnik([FromBody] AssignMedaljaToKorisnikRequest request)
@@ -89,6 +91,7 @@ namespace eLibrary.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize]
         [HttpGet]
         [Route("GetMedaljeForKorisnik")]
         public IActionResult GetMedaljeForKorisnik([FromQuery] GetMedaljeForKorisnikRequest request)

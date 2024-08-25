@@ -1,6 +1,7 @@
 ﻿using eLibrary.Commons.DTOs.Requests;
 using eLibrary.Commons.DTOs.Requests.Knjiga;
 using eLibrary.Commons.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eLibrary.Controllers
@@ -15,6 +16,7 @@ namespace eLibrary.Controllers
             _service = service;
         }
 
+        [Authorize]
         [HttpGet]
         [Route("GetKnjige")]
         public IActionResult GetKnjige([FromQuery] GetKnjigeRequest request)
@@ -30,6 +32,7 @@ namespace eLibrary.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         [Route("CreateKnjiga")]
         public IActionResult CreateKnjiga([FromBody] CreateKnjigaRequest request)
@@ -44,6 +47,8 @@ namespace eLibrary.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Authorize]
         [HttpPut]
         [Route("UpdateKnjiga")]
         public IActionResult UpdateKnjiga([FromBody] UpdateKnjigaRequest request)
@@ -59,6 +64,7 @@ namespace eLibrary.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("DeleteKnjiga")]
         public IActionResult DeleteKnjiga([FromBody] CommonDeleteRequest request)
