@@ -31,7 +31,7 @@ namespace eLibrary.Services
             }
             if (request.DatumIzdavanja.HasValue)
             {
-                query = query.Where(k => k.DatumIzdavanja == request.DatumIzdavanja.Value);
+                query = query.Where(k => k.DatumIzdavanja.Year == request.DatumIzdavanja.Value.Year);
             }
             if (request.Dostupnost.HasValue)
             {
@@ -40,6 +40,15 @@ namespace eLibrary.Services
             if (request.Cijena.HasValue)
             {
                 query = query.Where(k => k.Cijena == request.Cijena.Value);
+            }
+            if (request.SelectedZanrIds != null && request.SelectedZanrIds.Count > 0)
+            {
+                var knjigaIds = db.ZanroviKnjigas
+                    .Where(zk => request.SelectedZanrIds.Select(z => z).Contains(zk.ZanrId))
+                    .Select(zk => zk.KnjigaId)
+                    .Distinct()
+                    .ToList();
+                query = query.Where(k => knjigaIds.Contains(k.IdKnjiga));
             }
 
             var response = query.ToList();
@@ -63,6 +72,9 @@ namespace eLibrary.Services
 
             return dataList;
         }
+
+
+
 
         public CommonResponse CreateKnjiga(CreateKnjigaRequest request)
         {
