@@ -102,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: TextField(
                     controller: _titleController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Title',
                       border: OutlineInputBorder(),
                     ),
@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           ElevatedButton(
             onPressed: _applyFilters,
-            child: Text('Apply Filters'),
+            child: const Text('Apply Filters'),
           ),
           Expanded(
             child: FutureBuilder<List<Knjiga>>(

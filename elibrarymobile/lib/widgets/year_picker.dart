@@ -9,13 +9,13 @@ class CustomYearPicker extends StatelessWidget {
   final DragStartBehavior dragStartBehavior;
 
   const CustomYearPicker({
-    Key? key,
+    super.key,
     required this.firstDate,
     required this.lastDate,
     required this.selectedDate,
     required this.onChanged,
     this.dragStartBehavior = DragStartBehavior.start,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

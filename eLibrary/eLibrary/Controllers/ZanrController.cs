@@ -48,6 +48,7 @@ namespace eLibrary.Controllers
             }
 
             [Authorize(Policy = "AdminOnly")]
+            [HttpPost]
             [Route("CreateZanr")]
             public IActionResult CreateZanr([FromBody] CreateZanrRequest request)
             {
