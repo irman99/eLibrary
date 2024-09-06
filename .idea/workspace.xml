@@ -5,18 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a113e81a-3129-4574-b9f0-539c59707d57" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/elibrarymobile/lib/models/login_response.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/other.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/elibrarymobile/lib/screens/home_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/elibrarymobile/lib/screens/home_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/elibrarymobile/lib/screens/knjiga_detail_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/elibrarymobile/lib/screens/knjiga_detail_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eLibrary/eLibrary/Commons/Interfaces/IKorisnikService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/eLibrary/eLibrary/Commons/Interfaces/IKorisnikService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eLibrary/eLibrary/Controllers/KorisnikController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/eLibrary/eLibrary/Controllers/KorisnikController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eLibrary/eLibrary/Services/KorisnikService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/eLibrary/eLibrary/Services/KorisnikService.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/elibrarymobile/lib/screens/login_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/elibrarymobile/lib/screens/login_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/elibrarymobile/lib/services/knjiga_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/elibrarymobile/lib/services/knjiga_service.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/elibrarymobile/lib/services/korisnik_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/elibrarymobile/lib/services/korisnik_service.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/elibrarymobile/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/elibrarymobile/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/elibrarymobile/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/elibrarymobile/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/elibrarymobile/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/elibrarymobile/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

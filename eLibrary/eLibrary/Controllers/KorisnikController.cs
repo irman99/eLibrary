@@ -3,6 +3,8 @@ using eLibrary.Commons.DTOs.Requests;
 using eLibrary.Commons.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 namespace eLibrary.Controllers
 {
@@ -11,47 +13,72 @@ namespace eLibrary.Controllers
         public class KorisnikController : ControllerBase
         {
             private readonly IKorisnikService _service;
+            private readonly UserManager<IdentityUser> _userManager;
+            private readonly RoleManager<IdentityUser> _roleManager;
+            private readonly IConfiguration _configuration;
 
-            public KorisnikController(IKorisnikService service)
+            public KorisnikController(IKorisnikService service,UserManager<IdentityUser>userManager,RoleManager<IdentityUser>roleManager,IConfiguration configuration)
             {
                 _service = service;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _configuration = configuration;
             }
 
-            [HttpPost]
-            [Route("RegisterKorisnik")]
-            [AllowAnonymous]
-            public IActionResult RegisterKorisnik([FromBody] RegisterKorisnikRequest request)
+        [HttpGet("Me")]
+        public IActionResult GetUserInfo()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
             {
-                try
-                {
-                    var response = _service.RegisterKorisnik(request);
-                    return Ok(response);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                return Unauthorized();
             }
 
-            [HttpPost]
-            [Route("LoginKorisnik")]
-            [AllowAnonymous]
-            public IActionResult LoginKorisnik([FromBody] LoginKorisnikRequest request)
+            var user = _service.GetUserById(userId);
+            if (user == null)
             {
-                try
-                {
-                    var response = _service.LoginKorisnik(request);
-                    return Ok(response);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                return NotFound();
             }
 
-            [HttpGet]
+            return Ok(user);
+        }
+
+        [HttpPost]
+        [Route("RegisterKorisnik")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RegisterKorisnik([FromBody] RegisterKorisnikRequest request)
+        {
+            try
+            {
+                var response = await _service.RegisterKorisnikAsync(request);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("LoginKorisnik")]
+        [AllowAnonymous]
+        public async Task<IActionResult> LoginKorisnik([FromBody] LoginKorisnikRequest request)
+        {
+            try
+            {
+                var response = await _service.LoginKorisnikAsync(request);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet]
             [Route("GetKorisnik")]
-            [Authorize]
             public IActionResult GetKorisnik([FromQuery] GetKorisnikRequest request)
             {
                 try

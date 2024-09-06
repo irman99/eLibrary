@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/korisnik_service.dart';
 import '../widgets/app_bar.dart';
-// Import the HomeScreen
 import 'register_screen.dart'; // Import the RegisterScreen
 
 class LoginScreen extends StatefulWidget {
@@ -12,9 +11,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _apiService = ApiService(); // Replace with your API URL
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final ApiService _apiService = ApiService(); // API service instance
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
   String? _errorMessage;
 
@@ -25,20 +24,16 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      final message = await _apiService.loginUser(
+      await _apiService.loginUser(
         korisnickoIme: _usernameController.text,
         lozinka: _passwordController.text,
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
-
       // Navigate to HomeScreen on successful login
-      if (message == 'Login successful.') {
-  Navigator.pushReplacementNamed(context, '/home');
-}
+      Navigator.pushReplacementNamed(context, '/home');
     } catch (e) {
       setState(() {
-        _errorMessage = e.toString();
+        _errorMessage = e.toString(); // Show the error message
       });
     } finally {
       setState(() {
@@ -94,23 +89,23 @@ class _LoginScreenState extends State<LoginScreen> {
                 _isLoading
                     ? const CircularProgressIndicator()
                     : Column(
-                        children: [
-                          ElevatedButton(
-                            onPressed: _login,
-                            child: const Text('Login'),
-                          ),
-                          const SizedBox(height: 16),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const RegisterScreen()),
-                              );
-                            },
-                            child: const Text('Don\'t have an account? Register'),
-                          ),
-                        ],
-                      ),
+                  children: [
+                    ElevatedButton(
+                      onPressed: _login,
+                      child: const Text('Login'),
+                    ),
+                    const SizedBox(height: 16),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                        );
+                      },
+                      child: const Text('Don\'t have an account? Register'),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

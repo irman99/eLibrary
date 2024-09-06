@@ -16,7 +16,8 @@ namespace eLibrary.Controllers
             _service = service;
         }
 
-        
+
+        [Authorize]
         [HttpGet]
         [Route("GetKnjige")]
         public IActionResult GetKnjige([FromQuery] GetKnjigeRequest request)

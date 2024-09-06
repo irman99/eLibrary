@@ -4,7 +4,9 @@ using eLibrary.Commons.DTOs.Responses;
 using eLibrary.Commons.DTOs.Responses.Korisnik;
 using eLibrary.Commons.Interfaces;
 using eLibrary.Database.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,26 +17,39 @@ namespace eLibrary.Services
 {
     public class KorisnikService : IKorisnikService
     {
-        private readonly byte[] _secretKey;
+        
         private readonly dbIB190096Context _db;
+        private readonly IConfiguration _configuration;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityUser> _roleManager;
 
-        public KorisnikService(string secretKey, dbIB190096Context db)
-        {
-            if (string.IsNullOrEmpty(secretKey) || secretKey.Length < 32) // Check if the key is at least 32 bytes (256 bits)
-                throw new ArgumentException("Secret key must be at least 256 bits long.", nameof(secretKey));
 
-            _secretKey = Convert.FromBase64String(secretKey);
-            if (_secretKey.Length != 32)
-                throw new ArgumentException("Secret key must be 256 bits (32 bytes) long.", nameof(secretKey));
-
+        public KorisnikService(dbIB190096Context db, IConfiguration configuration, UserManager<IdentityUser> userManager, RoleManager<IdentityUser> roleManager)
+        {            
             _db = db ?? throw new ArgumentNullException(nameof(db));
+            _configuration = configuration;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
-        public CommonResponse RegisterKorisnik(RegisterKorisnikRequest request)
+        public Korisnik GetUserById(string userId)
+        {
+            return _db.Korisniks.Find(userId);
+        }
+
+        public async Task<CommonResponse> RegisterKorisnikAsync(RegisterKorisnikRequest request)
         {
             if (_db.Korisniks.Any(k => k.Email == request.Email || k.KorisnickoIme == request.KorisnickoIme))
             {
                 throw new InvalidOperationException("Korisnicko ime ili email koje ste unijeli vec postoji.");
+            }
+
+            var user = new IdentityUser { UserName = request.KorisnickoIme, Email = request.Email };
+            var result = await _userManager.CreateAsync(user, request.Lozinka);
+
+            if (!result.Succeeded)
+            {
+                throw new InvalidOperationException("Error creating user: " + string.Join(", ", result.Errors.Select(e => e.Description)));
             }
 
             var salt = GenerateSalt();
@@ -67,6 +82,7 @@ namespace eLibrary.Services
             return new CommonResponse { Message = "User registered successfully." };
         }
 
+
         public List<GetKorisnikResponse> GetAllKorisniks()
         {
             var korisnici = _db.Korisniks.ToList();
@@ -84,18 +100,39 @@ namespace eLibrary.Services
             }).ToList();
         }
 
-        public LogInResponse LoginKorisnik(LoginKorisnikRequest request)
+        public async Task<LogInResponse> LoginKorisnikAsync(LoginKorisnikRequest request)
         {
-            var korisnik = _db.Korisniks.FirstOrDefault(k => k.KorisnickoIme == request.KorisnickoIme);
-            if (korisnik == null || !VerifyPassword(request.Lozinka, korisnik.LozinkaHash, korisnik.LozinkaSalt))
+            var user = await _userManager.FindByNameAsync(request.KorisnickoIme);
+            if (user == null || !await _userManager.CheckPasswordAsync(user, request.Lozinka))
             {
                 throw new InvalidOperationException("Password or username incorrect.");
             }
 
-            var token = GenerateJwtToken(korisnik);
+            var userRoles = await _userManager.GetRolesAsync(user);
 
-            return new LogInResponse { Message = "Login successful.", Token = token };
+            var authClaims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+    };
+
+            authClaims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+            // Generate JWT token
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                expires: DateTime.Now.AddMinutes(double.Parse(_configuration["Jwt:ExpiryMinutes"])),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"])),
+                SecurityAlgorithms.HmacSha256));
+
+            return new LogInResponse
+            {
+                Message = "Login successful.",
+                Token = new JwtSecurityTokenHandler().WriteToken(token)
+            };
         }
+
 
         public GetKorisnikResponse GetKorisnik(GetKorisnikRequest request)
         {
@@ -197,45 +234,42 @@ namespace eLibrary.Services
             return hash == computedHash;
         }
 
-        private string GenerateJwtToken(Korisnik korisnik)
+        private string CreateToken(Korisnik user)
         {
-            if (_secretKey == null || _secretKey.Length != 32) // Ensure the key is valid
-                throw new InvalidOperationException("Secret key is not properly set.");
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.IdKorisnik.ToString()),
+        new Claim(ClaimTypes.Name, user.KorisnickoIme),
+        new Claim(ClaimTypes.Role, GetRoleForUser(user.TipKorisnikaId.Value)) // Assuming a method to get role string
+    };
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = new SymmetricSecurityKey(_secretKey);
-
-            // Map TipKorisnikaId to role names
-            string role;
-            switch (korisnik.TipKorisnikaId)
-            {
-                case 1:
-                    role = "Admin";
-                    break;
-                case 2:
-                    role = "SuperAdmin";
-                    break;
-                case 3:
-                    role = "User";
-                    break;
-                default:
-                    role = "User"; // Default role if ID is not recognized
-                    break;
-            }
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AppSettings:Token"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, korisnik.KorisnickoIme ?? throw new ArgumentNullException(nameof(korisnik.KorisnickoIme))),
-                    new Claim(ClaimTypes.Role, role) // Include the role in the token
-                }),
-                Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(1), // Set token expiration
+                SigningCredentials = creds
             };
 
+            var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
+
             return tokenHandler.WriteToken(token);
         }
+
+        private string GetRoleForUser(int tipKorisnikaId)
+        {
+            return tipKorisnikaId switch
+            {
+                1 => "Admin",
+                2 => "SuperAdmin",
+                3 => "User",
+                _ => "User"
+            };
+        }
+
+
     }
 }
