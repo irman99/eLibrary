@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace eLibrary.Database.Models;
 
 [Table("Kartica")]
+[Index("KorisnikId", Name = "IX_Kartica_KorisnikID")]
 public partial class Kartica
 {
     [Key]

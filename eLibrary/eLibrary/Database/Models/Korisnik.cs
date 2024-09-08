@@ -30,14 +30,13 @@ public partial class Korisnik
     [Column(TypeName = "datetime")]
     public DateTime DatumRodjenja { get; set; }
 
-    [Column("TipKorisnikaID")]
-    public int? TipKorisnikaId { get; set; }
-
     [StringLength(50)]
     public string? LozinkaHash { get; set; }
 
     [StringLength(50)]
     public string? LozinkaSalt { get; set; }
+
+    public int? TipKorisnikaId { get; set; }
 
     [InverseProperty("Korisnik")]
     public virtual ICollection<Autor> Autors { get; set; } = new List<Autor>();

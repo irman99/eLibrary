@@ -10,7 +10,7 @@ namespace eLibrary.Commons.Interfaces
     {
         Korisnik GetUserById(string userId);
         Task<CommonResponse> RegisterKorisnikAsync(RegisterKorisnikRequest request);
-        Task<LogInResponse> LoginKorisnikAsync(LoginKorisnikRequest request);
+        Task<Korisnik> ValidateUserAsync(LoginKorisnikRequest request);
         List<GetKorisnikResponse> GetAllKorisniks();
         GetKorisnikResponse GetKorisnik(GetKorisnikRequest request);
         CommonResponse UpdateKorisnik(UpdateKorisnikRequest request);

@@ -51,8 +51,6 @@ public partial class dbIB190096Context : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.UseCollation("Latin1_General_CI_AS");
-
         modelBuilder.Entity<Autor>(entity =>
         {
             entity.HasKey(e => e.AutorId).HasName("PK__Autor__F58AE909C6B597BE");
@@ -150,9 +148,9 @@ public partial class dbIB190096Context : DbContext
 
         modelBuilder.Entity<TipKorisnika>(entity =>
         {
-            entity.HasKey(e => e.IdTipKorisnika).HasName("PK__TipKoris__8AAF1E40BE47B039");
+            entity.HasKey(e => e.TipKorisnikaId).HasName("PK__TipKoris__6CE42F6E2E6AEA47");
 
-            entity.Property(e => e.IdTipKorisnika).ValueGeneratedNever();
+            entity.Property(e => e.TipKorisnikaId).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<TipNotifikacije>(entity =>

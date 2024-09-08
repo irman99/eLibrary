@@ -1,29 +1,29 @@
-﻿using eLibrary.Commons.DTOs.Requests.Korisnik;
-using eLibrary.Commons.DTOs.Requests;
+﻿using eLibrary.Commons.DTOs.Requests;
+using eLibrary.Commons.DTOs.Requests.Korisnik;
 using eLibrary.Commons.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+using eLibrary.Database.Models;
+using eLibrary.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace eLibrary.Controllers
 {
-        [ApiController]
-        [Route("[controller]")]
-        public class KorisnikController : ControllerBase
-        {
-            private readonly IKorisnikService _service;
-            private readonly UserManager<IdentityUser> _userManager;
-            private readonly RoleManager<IdentityUser> _roleManager;
-            private readonly IConfiguration _configuration;
+    [ApiController]
+    [Route("[controller]")]
+    public class KorisnikController : ControllerBase
+    {
+        private readonly IKorisnikService _service;
+        private readonly JwtService _jwtService;
+        private readonly IConfiguration _configuration;
 
-            public KorisnikController(IKorisnikService service,UserManager<IdentityUser>userManager,RoleManager<IdentityUser>roleManager,IConfiguration configuration)
-            {
-                _service = service;
-            _userManager = userManager;
-            _roleManager = roleManager;
+        public KorisnikController(IKorisnikService service, JwtService jwtService, IConfiguration configuration)
+        {
+            _service = service;
+            _jwtService = jwtService;
             _configuration = configuration;
-            }
+        }
 
         [HttpGet("Me")]
         public IActionResult GetUserInfo()
@@ -67,7 +67,29 @@ namespace eLibrary.Controllers
         {
             try
             {
-                var response = await _service.LoginKorisnikAsync(request);
+                var user = await _service.ValidateUserAsync(request);
+                if (user == null)
+                {
+                    return Unauthorized(); 
+                }
+
+                var token = _jwtService.GenerateToken(user);
+
+                return Ok(new { token });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message }); // Return a more structured error response
+            }
+        }
+
+        [HttpGet]
+        [Route("GetKorisnik")]
+        public IActionResult GetKorisnik([FromQuery] GetKorisnikRequest request)
+        {
+            try
+            {
+                var response = _service.GetKorisnik(request);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -76,40 +98,25 @@ namespace eLibrary.Controllers
             }
         }
 
-
-        [HttpGet]
-            [Route("GetKorisnik")]
-            public IActionResult GetKorisnik([FromQuery] GetKorisnikRequest request)
+        [HttpPut]
+        [Route("UpdateKorisnik")]
+        [Authorize]
+        public IActionResult UpdateKorisnik([FromBody] UpdateKorisnikRequest request)
+        {
+            try
             {
-                try
-                {
-                    var response = _service.GetKorisnik(request);
-                    return Ok(response);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                var response = _service.UpdateKorisnik(request);
+                return Ok(response);
             }
-
-            [HttpPut]
-            [Route("UpdateKorisnik")]
-            [Authorize]
-            public IActionResult UpdateKorisnik([FromBody] UpdateKorisnikRequest request)
+            catch (Exception ex)
             {
-                try
-                {
-                    var response = _service.UpdateKorisnik(request);
-                    return Ok(response);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                return BadRequest(ex.Message);
             }
+        }
+
+        [Authorize]
         [HttpGet]
         [Route("GetAllKorisniks")]
-        [Authorize(Policy = "AdminOnly")]
         public IActionResult GetAllKorisniks()
         {
             try
@@ -122,21 +129,21 @@ namespace eLibrary.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpDelete]
-            [Route("DeleteKorisnik")]
-            [Authorize(Policy = "AdminOnly")]
-            public IActionResult DeleteKorisnik([FromBody] CommonDeleteRequest request)
+        [Route("DeleteKorisnik")]
+        [Authorize(Policy = "AdminOnly")]
+        public IActionResult DeleteKorisnik([FromBody] CommonDeleteRequest request)
+        {
+            try
             {
-                try
-                {
-                    var response = _service.DeleteKorisnik(request);
-                    return Ok(response);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
+                var response = _service.DeleteKorisnik(request);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
-    
+    }
 }

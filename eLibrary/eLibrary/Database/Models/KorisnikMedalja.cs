@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 namespace eLibrary.Database.Models;
 
 [Table("KorisnikMedalja")]
+[Index("KorisnikId", Name = "IX_KorisnikMedalja_KorisnikID")]
+[Index("MedaljaId", Name = "IX_KorisnikMedalja_MedaljaID")]
 public partial class KorisnikMedalja
 {
     [Key]

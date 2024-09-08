@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace eLibrary.Database.Models;
 
 [Table("Autor")]
+[Index("KorisnikId", Name = "IX_Autor_KorisnikID")]
 public partial class Autor
 {
     [Key]
